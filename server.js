@@ -1,9 +1,19 @@
 import express from "express"
-import { mountAuthRoutes } from "./lib/auth"
+import { mountAuthRoutes } from "./lib/auth.js"
+import dotenv from "dotenv"
+import cors from "cors"
+
+dotenv.config()
 
 const app = express()
 
-mountAuthRoutes(app)
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}))
+
+mountAuthRoutes(app, cors())
 
 app.use(express.json())
 
