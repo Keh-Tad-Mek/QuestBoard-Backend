@@ -1,6 +1,18 @@
 import { relations } from "drizzle-orm";
+import { integer } from "drizzle-orm/gel-core";
 import * as t from "drizzle-orm/pg-core"
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+
+export const quests = pgTable("quests", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  title: t.varchar("title", { length: 50 }).notNull(),
+  description: t.varchar("description", { length: 2000 }).notNull(),
+  completionRequirement: t.varchar("completionRequirement", { length: 2000 }).notNull(),
+  maxQuestTakers: integer("maxQuestTakers"),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+})
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
